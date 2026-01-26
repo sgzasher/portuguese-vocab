@@ -863,16 +863,17 @@
             // Skip header and separator rows
             for (let i = 2; i < lines.length; i++) {
                 const line = lines[i];
-                // Split by | and clean up cells
-                const cells = line.split('|').map(cell => cell.trim()).filter(cell => cell);
+                // Split by | and clean up cells (keep empty cells for proper indexing)
+                const cells = line.split('|').map(cell => cell.trim());
+                // cells[0] is empty (before first |), so actual data starts at index 1
 
-                if (cells.length >= 6) {
-                    const number = parseInt(cells[0].trim());
-                    const palavra = cells[1].trim();
-                    const significado = cells[2].trim();
-                    const conjText = cells[3].trim();
-                    const quote = cells[4].trim().replace(/"/g, '"').replace(/"/g, '"');
-                    const example = cells[5].trim();
+                if (cells.length >= 7) {
+                    const number = parseInt(cells[1]);
+                    const palavra = cells[2];
+                    const significado = cells[3];
+                    const conjText = cells[4];
+                    const quote = cells[5].replace(/"/g, '"').replace(/"/g, '"');
+                    const example = cells[6];
 
                     // Parse conjugations - split by multiple spaces or newlines
                     const conjugations = conjText

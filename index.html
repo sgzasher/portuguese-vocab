@@ -656,6 +656,9 @@
                         </div>
 
                         <div class="answer-section hidden" id="answerSection">
+                            <h3>Full Word</h3>
+                            <p id="answerFullWord" style="font-weight: bold; font-size: 1.1em;"></p>
+
                             <h3>English Meaning</h3>
                             <p id="answerMeaning"></p>
 
@@ -705,6 +708,7 @@
 
                         <div class="answer-section hidden" id="typeInAnswer">
                             <h3>Correct Answer</h3>
+                            <p><strong>Full Word:</strong> <span id="correctFullWord"></span></p>
                             <p><strong>Meaning:</strong> <span id="correctMeaning"></span></p>
                             <div id="correctConjSection">
                                 <p><strong>Conjugations:</strong> <span id="correctConj"></span></p>
@@ -732,6 +736,7 @@
                             <div class="flashcard-word" id="cardWord">Aparecer</div>
                         </div>
                         <div class="flashcard-back">
+                            <p style="font-size: 1.2em; margin-bottom: 8px;" id="cardFullWord">Aparecer (em)</p>
                             <p><strong id="cardMeaning">To appear</strong></p>
                             <div id="cardConjugations" class="conjugations"></div>
                             <p style="margin-top: 16px; font-style: italic;" id="cardExample"></p>
@@ -949,6 +954,23 @@
                 .replace(/[\u0300-\u036f]/g, '');
         }
 
+        // Strip article (for nouns) or parenthetical parts (for verbs) for quiz display
+        // Users should practice recalling these parts themselves
+        function getQuizPrompt(word) {
+            let text = word.palavra;
+
+            if (word.isVerb) {
+                // Strip parenthetical parts like "(em)", "(+ inf)", "(-se)", "(de)", "(para)"
+                // Handle both with space before and attached like "(-se)"
+                text = text.replace(/\s*\([^)]+\)/g, '').trim();
+            } else {
+                // Strip leading articles: O, A, Os, As, O/a, A/o
+                text = text.replace(/^(O\/a|A\/o|Os|As|O|A)\s+/i, '').trim();
+            }
+
+            return text;
+        }
+
         // App State
         let state = {
             currentSection: 'quiz',
@@ -1043,9 +1065,9 @@
             state.currentQuizWord = vocabData[randomIndex];
             state.answerRevealed = false;
 
-            // Update display
+            // Update display - show stripped version (without article/parenthetical)
             document.getElementById('quizNumber').textContent = state.currentQuizWord.number;
-            document.getElementById('quizWord').textContent = state.currentQuizWord.palavra;
+            document.getElementById('quizWord').textContent = getQuizPrompt(state.currentQuizWord);
 
             // Reset self-grade mode
             document.getElementById('answerSection').classList.add('hidden');
@@ -1073,6 +1095,7 @@
         function showAnswer() {
             const word = state.currentQuizWord;
 
+            document.getElementById('answerFullWord').textContent = word.palavra;
             document.getElementById('answerMeaning').textContent = word.significado;
 
             const conjSection = document.getElementById('answerConjugations');
@@ -1157,6 +1180,7 @@
             feedbackExample.textContent = 'Example recorded';
 
             // Show correct answers
+            document.getElementById('correctFullWord').textContent = word.palavra;
             document.getElementById('correctMeaning').textContent = word.significado;
             document.getElementById('correctConj').textContent = word.conjugations.join(', ') || 'N/A';
             document.getElementById('correctExample').textContent = word.example;
@@ -1236,11 +1260,12 @@
             // Reset card flip
             flashcard.classList.remove('flipped');
 
-            // Front
+            // Front - show stripped version (without article/parenthetical)
             document.getElementById('cardNumber').textContent = word.number;
-            document.getElementById('cardWord').textContent = word.palavra;
+            document.getElementById('cardWord').textContent = getQuizPrompt(word);
 
-            // Back
+            // Back - show full word with article/parenthetical
+            document.getElementById('cardFullWord').textContent = word.palavra;
             document.getElementById('cardMeaning').textContent = word.significado;
 
             const conjDiv = document.getElementById('cardConjugations');

@@ -1,0 +1,202 @@
+{
+  "aparecer": {
+    "presente": { "eu": "apareço", "voce": "aparece", "nos": "aparecemos", "voces": "aparecem" },
+    "preterito_perfeito": { "eu": "apareci", "voce": "apareceu", "nos": "aparecemos", "voces": "apareceram" },
+    "preterito_imperfeito": { "eu": "aparecia", "voce": "aparecia", "nos": "aparecíamos", "voces": "apareciam" },
+    "futuro_simples": { "eu": "aparecerei", "voce": "aparecerá", "nos": "apareceremos", "voces": "aparecerão" },
+    "condicional_simples": { "eu": "apareceria", "voce": "apareceria", "nos": "apareceríamos", "voces": "apareceriam" },
+    "gerundio": "aparecendo",
+    "participio": "aparecido",
+    "imperativo": { "voce": "apareça", "voces": "apareçam" }
+  },
+  "vencer": {
+    "presente": { "eu": "venço", "voce": "vence", "nos": "vencemos", "voces": "vencem" },
+    "preterito_perfeito": { "eu": "venci", "voce": "venceu", "nos": "vencemos", "voces": "venceram" },
+    "preterito_imperfeito": { "eu": "vencia", "voce": "vencia", "nos": "vencíamos", "voces": "venciam" },
+    "futuro_simples": { "eu": "vencerei", "voce": "vencerá", "nos": "venceremos", "voces": "vencerão" },
+    "condicional_simples": { "eu": "venceria", "voce": "venceria", "nos": "venceríamos", "voces": "venceriam" },
+    "gerundio": "vencendo",
+    "participio": "vencido",
+    "imperativo": { "voce": "vença", "voces": "vençam" }
+  },
+  "tentar": {
+    "presente": { "eu": "tento", "voce": "tenta", "nos": "tentamos", "voces": "tentam" },
+    "preterito_perfeito": { "eu": "tentei", "voce": "tentou", "nos": "tentamos", "voces": "tentaram" },
+    "preterito_imperfeito": { "eu": "tentava", "voce": "tentava", "nos": "tentávamos", "voces": "tentavam" },
+    "futuro_simples": { "eu": "tentarei", "voce": "tentará", "nos": "tentaremos", "voces": "tentarão" },
+    "condicional_simples": { "eu": "tentaria", "voce": "tentaria", "nos": "tentaríamos", "voces": "tentariam" },
+    "gerundio": "tentando",
+    "participio": "tentado",
+    "imperativo": { "voce": "tente", "voces": "tentem" }
+  },
+  "acontecer": {
+    "presente": { "eu": "aconteço", "voce": "acontece", "nos": "acontecemos", "voces": "acontecem" },
+    "preterito_perfeito": { "eu": "aconteci", "voce": "aconteceu", "nos": "acontecemos", "voces": "aconteceram" },
+    "preterito_imperfeito": { "eu": "acontecia", "voce": "acontecia", "nos": "acontecíamos", "voces": "aconteciam" },
+    "futuro_simples": { "eu": "acontecerei", "voce": "acontecerá", "nos": "aconteceremos", "voces": "acontecerão" },
+    "condicional_simples": { "eu": "aconteceria", "voce": "aconteceria", "nos": "aconteceríamos", "voces": "aconteceriam" },
+    "gerundio": "acontecendo",
+    "participio": "acontecido",
+    "imperativo": { "voce": "aconteça", "voces": "aconteçam" }
+  },
+  "votar": {
+    "presente": { "eu": "voto", "voce": "vota", "nos": "votamos", "voces": "votam" },
+    "preterito_perfeito": { "eu": "votei", "voce": "votou", "nos": "votamos", "voces": "votaram" },
+    "preterito_imperfeito": { "eu": "votava", "voce": "votava", "nos": "votávamos", "voces": "votavam" },
+    "futuro_simples": { "eu": "votarei", "voce": "votará", "nos": "votaremos", "voces": "votarão" },
+    "condicional_simples": { "eu": "votaria", "voce": "votaria", "nos": "votaríamos", "voces": "votariam" },
+    "gerundio": "votando",
+    "participio": "votado",
+    "imperativo": { "voce": "vote", "voces": "votem" }
+  },
+  "ver": {
+    "presente": { "eu": "vejo", "voce": "vê", "nos": "vemos", "voces": "vêem" },
+    "preterito_perfeito": { "eu": "vi", "voce": "viu", "nos": "vimos", "voces": "viram" },
+    "preterito_imperfeito": { "eu": "via", "voce": "via", "nos": "víamos", "voces": "viam" },
+    "futuro_simples": { "eu": "verei", "voce": "verá", "nos": "veremos", "voces": "verão" },
+    "condicional_simples": { "eu": "veria", "voce": "veria", "nos": "veríamos", "voces": "veriam" },
+    "gerundio": "vendo",
+    "participio": "visto",
+    "imperativo": { "voce": "veja", "voces": "vejam" }
+  },
+  "vir": {
+    "presente": { "eu": "venho", "voce": "vem", "nos": "vimos", "voces": "vêm" },
+    "preterito_perfeito": { "eu": "vim", "voce": "veio", "nos": "viemos", "voces": "vieram" },
+    "preterito_imperfeito": { "eu": "vinha", "voce": "vinha", "nos": "vínhamos", "voces": "vinham" },
+    "futuro_simples": { "eu": "virei", "voce": "virá", "nos": "viremos", "voces": "virão" },
+    "condicional_simples": { "eu": "viria", "voce": "viria", "nos": "viríamos", "voces": "viriam" },
+    "gerundio": "vindo",
+    "participio": "vindo",
+    "imperativo": { "voce": "venha", "voces": "venham" }
+  },
+  "procurar": {
+    "presente": { "eu": "procuro", "voce": "procura", "nos": "procuramos", "voces": "procuram" },
+    "preterito_perfeito": { "eu": "procurei", "voce": "procurou", "nos": "procuramos", "voces": "procuraram" },
+    "preterito_imperfeito": { "eu": "procurava", "voce": "procurava", "nos": "procurávamos", "voces": "procuravam" },
+    "futuro_simples": { "eu": "procurarei", "voce": "procurará", "nos": "procuraremos", "voces": "procurarão" },
+    "condicional_simples": { "eu": "procuraria", "voce": "procuraria", "nos": "procuraríamos", "voces": "procurariam" },
+    "gerundio": "procurando",
+    "participio": "procurado",
+    "imperativo": { "voce": "procure", "voces": "procurem" }
+  },
+  "perder": {
+    "presente": { "eu": "perco", "voce": "perde", "nos": "perdemos", "voces": "perdem" },
+    "preterito_perfeito": { "eu": "perdi", "voce": "perdeu", "nos": "perdemos", "voces": "perderam" },
+    "preterito_imperfeito": { "eu": "perdia", "voce": "perdia", "nos": "perdíamos", "voces": "perdiam" },
+    "futuro_simples": { "eu": "perderei", "voce": "perderá", "nos": "perderemos", "voces": "perderão" },
+    "condicional_simples": { "eu": "perderia", "voce": "perderia", "nos": "perderíamos", "voces": "perderiam" },
+    "gerundio": "perdendo",
+    "participio": "perdido",
+    "imperativo": { "voce": "perca", "voces": "percam" }
+  },
+  "ligar": {
+    "presente": { "eu": "ligo", "voce": "liga", "nos": "ligamos", "voces": "ligam" },
+    "preterito_perfeito": { "eu": "liguei", "voce": "ligou", "nos": "ligamos", "voces": "ligaram" },
+    "preterito_imperfeito": { "eu": "ligava", "voce": "ligava", "nos": "ligávamos", "voces": "ligavam" },
+    "futuro_simples": { "eu": "ligarei", "voce": "ligará", "nos": "ligaremos", "voces": "ligarão" },
+    "condicional_simples": { "eu": "ligaria", "voce": "ligaria", "nos": "ligaríamos", "voces": "ligariam" },
+    "gerundio": "ligando",
+    "participio": "ligado",
+    "imperativo": { "voce": "ligue", "voces": "liguem" }
+  },
+  "pedir": {
+    "presente": { "eu": "peço", "voce": "pede", "nos": "pedimos", "voces": "pedem" },
+    "preterito_perfeito": { "eu": "pedi", "voce": "pediu", "nos": "pedimos", "voces": "pediram" },
+    "preterito_imperfeito": { "eu": "pedia", "voce": "pedia", "nos": "pedíamos", "voces": "pediam" },
+    "futuro_simples": { "eu": "pedirei", "voce": "pedirá", "nos": "pediremos", "voces": "pedirão" },
+    "condicional_simples": { "eu": "pediria", "voce": "pediria", "nos": "pediríamos", "voces": "pediriam" },
+    "gerundio": "pedindo",
+    "participio": "pedido",
+    "imperativo": { "voce": "peça", "voces": "peçam" }
+  },
+  "parecer": {
+    "presente": { "eu": "pareço", "voce": "parece", "nos": "parecemos", "voces": "parecem" },
+    "preterito_perfeito": { "eu": "pareci", "voce": "pareceu", "nos": "parecemos", "voces": "pareceram" },
+    "preterito_imperfeito": { "eu": "parecia", "voce": "parecia", "nos": "parecíamos", "voces": "pareciam" },
+    "futuro_simples": { "eu": "parecerei", "voce": "parecerá", "nos": "pareceremos", "voces": "parecerão" },
+    "condicional_simples": { "eu": "pareceria", "voce": "pareceria", "nos": "pareceríamos", "voces": "pareceriam" },
+    "gerundio": "parecendo",
+    "participio": "parecido",
+    "imperativo": { "voce": "pareça", "voces": "pareçam" }
+  },
+  "dizer": {
+    "presente": { "eu": "digo", "voce": "diz", "nos": "dizemos", "voces": "dizem" },
+    "preterito_perfeito": { "eu": "disse", "voce": "disse", "nos": "dissemos", "voces": "disseram" },
+    "preterito_imperfeito": { "eu": "dizia", "voce": "dizia", "nos": "dizíamos", "voces": "diziam" },
+    "futuro_simples": { "eu": "direi", "voce": "dirá", "nos": "diremos", "voces": "dirão" },
+    "condicional_simples": { "eu": "diria", "voce": "diria", "nos": "diríamos", "voces": "diriam" },
+    "gerundio": "dizendo",
+    "participio": "dito",
+    "imperativo": { "voce": "diga", "voces": "digam" }
+  },
+  "haver": {
+    "presente": { "eu": "hei", "voce": "há", "nos": "havemos", "voces": "hão" },
+    "preterito_perfeito": { "eu": "houve", "voce": "houve", "nos": "houvemos", "voces": "houveram" },
+    "preterito_imperfeito": { "eu": "havia", "voce": "havia", "nos": "havíamos", "voces": "haviam" },
+    "futuro_simples": { "eu": "haverei", "voce": "haverá", "nos": "haveremos", "voces": "haverão" },
+    "condicional_simples": { "eu": "haveria", "voce": "haveria", "nos": "haveríamos", "voces": "haveriam" },
+    "gerundio": "havendo",
+    "participio": "havido",
+    "imperativo": { "voce": "haja", "voces": "hajam" }
+  },
+  "sentir": {
+    "presente": { "eu": "sinto", "voce": "sente", "nos": "sentimos", "voces": "sentem" },
+    "preterito_perfeito": { "eu": "senti", "voce": "sentiu", "nos": "sentimos", "voces": "sentiram" },
+    "preterito_imperfeito": { "eu": "sentia", "voce": "sentia", "nos": "sentíamos", "voces": "sentiam" },
+    "futuro_simples": { "eu": "sentirei", "voce": "sentirá", "nos": "sentiremos", "voces": "sentirão" },
+    "condicional_simples": { "eu": "sentiria", "voce": "sentiria", "nos": "sentiríamos", "voces": "sentiriam" },
+    "gerundio": "sentindo",
+    "participio": "sentido",
+    "imperativo": { "voce": "sinta", "voces": "sintam" }
+  },
+  "saber": {
+    "presente": { "eu": "sei", "voce": "sabe", "nos": "sabemos", "voces": "sabem" },
+    "preterito_perfeito": { "eu": "soube", "voce": "soube", "nos": "soubemos", "voces": "souberam" },
+    "preterito_imperfeito": { "eu": "sabia", "voce": "sabia", "nos": "sabíamos", "voces": "sabiam" },
+    "futuro_simples": { "eu": "saberei", "voce": "saberá", "nos": "saberemos", "voces": "saberão" },
+    "condicional_simples": { "eu": "saberia", "voce": "saberia", "nos": "saberíamos", "voces": "saberiam" },
+    "gerundio": "sabendo",
+    "participio": "sabido",
+    "imperativo": { "voce": "saiba", "voces": "saibam" }
+  },
+  "dar": {
+    "presente": { "eu": "dou", "voce": "dá", "nos": "damos", "voces": "dão" },
+    "preterito_perfeito": { "eu": "dei", "voce": "deu", "nos": "demos", "voces": "deram" },
+    "preterito_imperfeito": { "eu": "dava", "voce": "dava", "nos": "dávamos", "voces": "davam" },
+    "futuro_simples": { "eu": "darei", "voce": "dará", "nos": "daremos", "voces": "darão" },
+    "condicional_simples": { "eu": "daria", "voce": "daria", "nos": "daríamos", "voces": "dariam" },
+    "gerundio": "dando",
+    "participio": "dado",
+    "imperativo": { "voce": "dê", "voces": "dêem" }
+  },
+  "dirigir": {
+    "presente": { "eu": "dirijo", "voce": "dirige", "nos": "dirigimos", "voces": "dirigem" },
+    "preterito_perfeito": { "eu": "dirigi", "voce": "dirigiu", "nos": "dirigimos", "voces": "dirigiram" },
+    "preterito_imperfeito": { "eu": "dirigia", "voce": "dirigia", "nos": "dirigíamos", "voces": "dirigiam" },
+    "futuro_simples": { "eu": "dirigirei", "voce": "dirigirá", "nos": "dirigiremos", "voces": "dirigirão" },
+    "condicional_simples": { "eu": "dirigiria", "voce": "dirigiria", "nos": "dirigiríamos", "voces": "dirigiriam" },
+    "gerundio": "dirigindo",
+    "participio": "dirigido",
+    "imperativo": { "voce": "dirija", "voces": "dirijam" }
+  },
+  "levar": {
+    "presente": { "eu": "levo", "voce": "leva", "nos": "levamos", "voces": "levam" },
+    "preterito_perfeito": { "eu": "levei", "voce": "levou", "nos": "levamos", "voces": "levaram" },
+    "preterito_imperfeito": { "eu": "levava", "voce": "levava", "nos": "levávamos", "voces": "levavam" },
+    "futuro_simples": { "eu": "levarei", "voce": "levará", "nos": "levaremos", "voces": "levarão" },
+    "condicional_simples": { "eu": "levaria", "voce": "levaria", "nos": "levaríamos", "voces": "levariam" },
+    "gerundio": "levando",
+    "participio": "levado",
+    "imperativo": { "voce": "leve", "voces": "levem" }
+  },
+  "trazer": {
+    "presente": { "eu": "trago", "voce": "traz", "nos": "trazemos", "voces": "trazem" },
+    "preterito_perfeito": { "eu": "trouxe", "voce": "trouxe", "nos": "trouxemos", "voces": "trouxeram" },
+    "preterito_imperfeito": { "eu": "trazia", "voce": "trazia", "nos": "trazíamos", "voces": "traziam" },
+    "futuro_simples": { "eu": "trarei", "voce": "trará", "nos": "traremos", "voces": "trarão" },
+    "condicional_simples": { "eu": "traria", "voce": "traria", "nos": "traríamos", "voces": "trariam" },
+    "gerundio": "trazendo",
+    "participio": "trazido",
+    "imperativo": { "voce": "traga", "voces": "tragam" }
+  }
+}

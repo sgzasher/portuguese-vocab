@@ -616,6 +616,22 @@
             }
         }
 
+        /* Tense checkbox labels */
+        .tense-check {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.875rem;
+            cursor: pointer;
+            padding: 4px 0;
+        }
+
+        .tense-check input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
         /* Hidden class */
         .hidden {
             display: none !important;
@@ -630,6 +646,7 @@
 
     <nav>
         <button class="nav-btn active" data-section="quiz">Quiz</button>
+        <button class="nav-btn" data-section="conjugate">Conjugate</button>
         <button class="nav-btn" data-section="review">Review</button>
         <button class="nav-btn" data-section="browse">Browse</button>
         <button class="nav-btn" data-section="stats">Stats</button>
@@ -720,6 +737,39 @@
                             </div>
                         </div>
                     </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Conjugate Section -->
+        <section id="conjugate" class="section">
+            <div class="card">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                    <h2 style="margin-bottom: 0;">Conjugation Quiz</h2>
+                    <button class="btn btn-outline" id="conjSettingsToggle" style="padding: 8px 12px; min-height: 36px; font-size: 0.875rem;">Tenses</button>
+                </div>
+
+                <div id="conjSettings" class="hidden" style="background: var(--gray-100); border-radius: 8px; padding: 16px; margin-bottom: 16px;">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;" id="conjTenseCheckboxes"></div>
+                </div>
+
+                <div id="conjScore" style="text-align: center; font-size: 0.875rem; color: var(--gray-600); margin-bottom: 16px;">
+                    Score: <span id="conjCorrect">0</span> / <span id="conjTotal">0</span>
+                </div>
+
+                <div id="conjPrompt" style="text-align: center; padding: 24px 0;">
+                    <div style="font-size: 1.5rem; font-weight: bold; color: var(--primary); margin-bottom: 8px;" id="conjVerb">...</div>
+                    <div style="font-size: 1rem; color: var(--gray-600);" id="conjTenseLabel">...</div>
+                    <div style="font-size: 1.25rem; margin-top: 8px;" id="conjPersonLabel">...</div>
+                </div>
+
+                <div class="input-group">
+                    <input type="text" id="conjInput" placeholder="Type the conjugated form..." autocomplete="off" autocapitalize="none">
+                    <div class="feedback hidden" id="conjFeedback"></div>
+                </div>
+
+                <div class="btn-group">
+                    <button class="btn btn-primary btn-block" id="conjCheckBtn">Check</button>
                 </div>
             </div>
         </section>
@@ -1031,6 +1081,8 @@
 
             if (sectionId === 'quiz') {
                 startNewQuiz();
+            } else if (sectionId === 'conjugate') {
+                initConjQuiz();
             } else if (sectionId === 'review') {
                 initReview();
             } else if (sectionId === 'browse') {
@@ -1577,14 +1629,243 @@
             }
         });
 
+        // =============================================
+        // CONJUGATION QUIZ
+        // =============================================
+
+        let conjData = {};
+        let conjState = {
+            sessionCorrect: 0,
+            sessionTotal: 0,
+            currentVerb: null,
+            currentTense: null,
+            currentPerson: null,
+            correctAnswer: null,
+            answered: false,
+            enabledTenses: {}
+        };
+
+        const CONJ_TENSES = [
+            { key: 'presente', label: 'Presente', hasPersons: true },
+            { key: 'preterito_perfeito', label: 'Pretérito Perfeito', hasPersons: true },
+            { key: 'preterito_imperfeito', label: 'Pretérito Imperfeito', hasPersons: true },
+            { key: 'futuro_simples', label: 'Futuro Simples', hasPersons: true },
+            { key: 'condicional_simples', label: 'Condicional', hasPersons: true },
+            { key: 'gerundio', label: 'Gerúndio', hasPersons: false },
+            { key: 'imperativo', label: 'Imperativo', hasPersons: 'imperativo' },
+            { key: 'participio', label: 'Particípio', hasPersons: false },
+            { key: 'preterito_perfeito_composto', label: 'Pret. Perfeito Composto', hasPersons: true, compound: 'presente' },
+            { key: 'mais_que_perfeito_composto', label: 'Mais-que-perfeito Composto', hasPersons: true, compound: 'imperfeito' }
+        ];
+
+        const TER_PRESENTE = { eu: 'tenho', voce: 'tem', nos: 'temos', voces: 'têm' };
+        const TER_IMPERFEITO = { eu: 'tinha', voce: 'tinha', nos: 'tínhamos', voces: 'tinham' };
+        const PERSONS = ['eu', 'voce', 'nos', 'voces'];
+        const PERSON_LABELS = { eu: 'eu', voce: 'você', nos: 'nós', voces: 'vocês' };
+
+        async function loadConjugationData() {
+            try {
+                const response = await fetch('conjugations.json');
+                if (!response.ok) throw new Error('Failed to fetch');
+                conjData = await response.json();
+                console.log(`Loaded conjugations for ${Object.keys(conjData).length} verbs`);
+                return true;
+            } catch (error) {
+                console.error('Could not load conjugations.json:', error);
+                return false;
+            }
+        }
+
+        function loadConjState() {
+            const saved = localStorage.getItem('conjTrainerState');
+            if (saved) {
+                const parsed = JSON.parse(saved);
+                conjState.enabledTenses = parsed.enabledTenses || {};
+            }
+            // Default all tenses to enabled
+            CONJ_TENSES.forEach(t => {
+                if (conjState.enabledTenses[t.key] === undefined) {
+                    conjState.enabledTenses[t.key] = true;
+                }
+            });
+        }
+
+        function saveConjState() {
+            localStorage.setItem('conjTrainerState', JSON.stringify({
+                enabledTenses: conjState.enabledTenses
+            }));
+        }
+
+        function buildTenseCheckboxes() {
+            const container = document.getElementById('conjTenseCheckboxes');
+            container.innerHTML = CONJ_TENSES.map(t => `
+                <label class="tense-check">
+                    <input type="checkbox" data-tense="${t.key}" ${conjState.enabledTenses[t.key] ? 'checked' : ''}>
+                    ${t.label}
+                </label>
+            `).join('');
+
+            container.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+                cb.addEventListener('change', () => {
+                    conjState.enabledTenses[cb.dataset.tense] = cb.checked;
+                    saveConjState();
+                });
+            });
+        }
+
+        document.getElementById('conjSettingsToggle').addEventListener('click', () => {
+            document.getElementById('conjSettings').classList.toggle('hidden');
+        });
+
+        function initConjQuiz() {
+            if (Object.keys(conjData).length === 0) return;
+            loadConjState();
+            buildTenseCheckboxes();
+            conjState.sessionCorrect = 0;
+            conjState.sessionTotal = 0;
+            updateConjScore();
+            startConjQuestion();
+        }
+
+        function updateConjScore() {
+            document.getElementById('conjCorrect').textContent = conjState.sessionCorrect;
+            document.getElementById('conjTotal').textContent = conjState.sessionTotal;
+        }
+
+        function startConjQuestion() {
+            conjState.answered = false;
+
+            const verbs = Object.keys(conjData);
+            const enabledTenseKeys = CONJ_TENSES.filter(t => conjState.enabledTenses[t.key]).map(t => t.key);
+
+            if (enabledTenseKeys.length === 0) {
+                document.getElementById('conjVerb').textContent = 'No tenses enabled';
+                document.getElementById('conjTenseLabel').textContent = 'Enable at least one tense';
+                document.getElementById('conjPersonLabel').textContent = '';
+                return;
+            }
+
+            // Pick random verb and tense
+            const verb = verbs[Math.floor(Math.random() * verbs.length)];
+            const tenseKey = enabledTenseKeys[Math.floor(Math.random() * enabledTenseKeys.length)];
+            const tenseInfo = CONJ_TENSES.find(t => t.key === tenseKey);
+
+            conjState.currentVerb = verb;
+            conjState.currentTense = tenseKey;
+
+            // Determine person based on tense type
+            let person = null;
+            let correctAnswer = '';
+
+            if (tenseInfo.hasPersons === false) {
+                // Gerundio, Participio - no person
+                person = null;
+                if (tenseInfo.compound) {
+                    // compound with no person - shouldn't happen but handle
+                    correctAnswer = conjData[verb][tenseKey] || '';
+                } else {
+                    correctAnswer = conjData[verb][tenseKey] || '';
+                }
+            } else if (tenseInfo.hasPersons === 'imperativo') {
+                // Imperativo - only voce and voces
+                const impPersons = ['voce', 'voces'];
+                person = impPersons[Math.floor(Math.random() * impPersons.length)];
+                correctAnswer = conjData[verb].imperativo[person] || '';
+            } else if (tenseInfo.compound) {
+                // Compound tense
+                person = PERSONS[Math.floor(Math.random() * PERSONS.length)];
+                const terForms = tenseInfo.compound === 'presente' ? TER_PRESENTE : TER_IMPERFEITO;
+                correctAnswer = terForms[person] + ' ' + conjData[verb].participio;
+            } else {
+                // Normal tense with all 4 persons
+                person = PERSONS[Math.floor(Math.random() * PERSONS.length)];
+                correctAnswer = conjData[verb][tenseKey][person] || '';
+            }
+
+            conjState.currentPerson = person;
+            conjState.correctAnswer = correctAnswer;
+
+            // Update display
+            document.getElementById('conjVerb').textContent = verb;
+            document.getElementById('conjTenseLabel').textContent = tenseInfo.label;
+            document.getElementById('conjPersonLabel').textContent = person ? PERSON_LABELS[person] : '(no person)';
+
+            // Reset input and feedback
+            document.getElementById('conjInput').value = '';
+            const feedback = document.getElementById('conjFeedback');
+            feedback.classList.add('hidden');
+            feedback.classList.remove('correct', 'incorrect');
+
+            const btn = document.getElementById('conjCheckBtn');
+            btn.textContent = 'Check';
+            btn.className = 'btn btn-primary btn-block';
+
+            // Focus input
+            document.getElementById('conjInput').focus();
+        }
+
+        function checkConjAnswer() {
+            if (conjState.answered) {
+                startConjQuestion();
+                return;
+            }
+
+            const input = document.getElementById('conjInput').value.trim();
+            if (!input) return;
+
+            const correct = conjState.correctAnswer;
+            // Case-insensitive but accent-sensitive comparison
+            const isCorrect = input.toLowerCase() === correct.toLowerCase();
+
+            const feedback = document.getElementById('conjFeedback');
+            feedback.classList.remove('hidden', 'correct', 'incorrect');
+
+            if (isCorrect) {
+                feedback.classList.add('correct');
+                feedback.textContent = 'Correct!';
+                conjState.sessionCorrect++;
+            } else {
+                feedback.classList.add('incorrect');
+                feedback.textContent = `Incorrect. Answer: ${correct}`;
+            }
+
+            conjState.sessionTotal++;
+            conjState.answered = true;
+            updateConjScore();
+
+            const btn = document.getElementById('conjCheckBtn');
+            btn.textContent = 'Next';
+            btn.className = 'btn btn-success btn-block';
+        }
+
+        document.getElementById('conjCheckBtn').addEventListener('click', checkConjAnswer);
+
+        document.getElementById('conjInput').addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                checkConjAnswer();
+            }
+        });
+
+        // =============================================
+        // APP INITIALIZATION
+        // =============================================
+
         // Initialize app after loading vocab data
         async function initApp() {
-            const loaded = await loadVocabData();
-            if (loaded) {
+            const [vocabLoaded, conjLoaded] = await Promise.all([
+                loadVocabData(),
+                loadConjugationData()
+            ]);
+
+            if (vocabLoaded) {
                 loadState();
                 startNewQuiz();
-                // Update word count in header
                 document.querySelector('header p').textContent = `${vocabData.length} Words for Quiz Success`;
+            }
+
+            if (conjLoaded) {
+                loadConjState();
             }
         }
 

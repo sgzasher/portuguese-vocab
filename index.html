@@ -751,15 +751,23 @@
 
                 <div id="conjSettings" class="hidden" style="background: var(--gray-100); border-radius: 8px; padding: 16px; margin-bottom: 16px;">
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;" id="conjTenseCheckboxes"></div>
+                    <div style="border-top: 1px solid var(--gray-300); margin-top: 12px; padding-top: 12px;">
+                        <label class="tense-check">
+                            <input type="checkbox" id="ignoreAccentsCheckbox">
+                            Ignore accents when checking
+                        </label>
+                    </div>
                 </div>
 
                 <div id="conjScore" style="text-align: center; font-size: 0.875rem; color: var(--gray-600); margin-bottom: 16px;">
                     Score: <span id="conjCorrect">0</span> / <span id="conjTotal">0</span>
+                    <span id="accentBadge" class="hidden" style="display: none; margin-left: 8px; background: var(--warning); color: white; padding: 2px 6px; border-radius: 4px; font-size: 0.75rem; font-weight: 600;">Ã→A</span>
                 </div>
 
                 <div id="conjPrompt" style="text-align: center; padding: 24px 0;">
                     <div style="font-size: 1.5rem; font-weight: bold; color: var(--primary); margin-bottom: 8px;" id="conjVerb">...</div>
                     <div style="font-size: 1rem; color: var(--gray-600);" id="conjTenseLabel">...</div>
+                    <div style="font-size: 0.875rem; color: var(--gray-600); font-style: italic; margin-top: 4px;" id="conjEnglishHint"></div>
                     <div style="font-size: 1.25rem; margin-top: 8px;" id="conjPersonLabel">...</div>
                 </div>
 
@@ -1642,7 +1650,8 @@
             currentPerson: null,
             correctAnswer: null,
             answered: false,
-            enabledTenses: {}
+            enabledTenses: {},
+            ignoreAccents: false
         };
 
         const CONJ_TENSES = [
@@ -1663,6 +1672,55 @@
         const PERSONS = ['eu', 'voce', 'nos', 'voces'];
         const PERSON_LABELS = { eu: 'eu', voce: 'você', nos: 'nós', voces: 'vocês' };
 
+        const VERB_ENGLISH = {
+            aparecer:  { base: 'appear',   past: 'appeared',   pp: 'appeared',    gerund: 'appearing' },
+            vencer:    { base: 'beat',     past: 'beat',       pp: 'beaten',      gerund: 'beating' },
+            tentar:    { base: 'try',      past: 'tried',      pp: 'tried',       gerund: 'trying' },
+            acontecer: { base: 'happen',   past: 'happened',   pp: 'happened',    gerund: 'happening' },
+            votar:     { base: 'vote',     past: 'voted',      pp: 'voted',       gerund: 'voting' },
+            ver:       { base: 'see',      past: 'saw',        pp: 'seen',        gerund: 'seeing' },
+            vir:       { base: 'come',     past: 'came',       pp: 'come',        gerund: 'coming' },
+            procurar:  { base: 'look for', past: 'looked for', pp: 'looked for',  gerund: 'looking for' },
+            perder:    { base: 'lose',     past: 'lost',       pp: 'lost',        gerund: 'losing' },
+            ligar:     { base: 'call',     past: 'called',     pp: 'called',      gerund: 'calling' },
+            pedir:     { base: 'ask for',  past: 'asked for',  pp: 'asked for',   gerund: 'asking for' },
+            parecer:   { base: 'seem',     past: 'seemed',     pp: 'seemed',      gerund: 'seeming' },
+            dizer:     { base: 'say',      past: 'said',       pp: 'said',        gerund: 'saying' },
+            haver:     { base: 'have',     past: 'had',        pp: 'had',         gerund: 'having' },
+            sentir:    { base: 'feel',     past: 'felt',       pp: 'felt',        gerund: 'feeling' },
+            saber:     { base: 'know',     past: 'knew',       pp: 'known',       gerund: 'knowing' },
+            dar:       { base: 'give',     past: 'gave',       pp: 'given',       gerund: 'giving' },
+            dirigir:   { base: 'drive',    past: 'drove',      pp: 'driven',      gerund: 'driving' },
+            levar:     { base: 'take',     past: 'took',       pp: 'taken',       gerund: 'taking' },
+            trazer:    { base: 'bring',    past: 'brought',    pp: 'brought',     gerund: 'bringing' }
+        };
+
+        function getEnglishHint(tenseKey, verbEnglish, person) {
+            if (!verbEnglish) return '';
+            const subj = { eu: 'I', voce: 'you', nos: 'we', voces: 'you (pl.)' };
+            const s = person ? subj[person] : '';
+            switch (tenseKey) {
+                case 'presente': return `${s} ${verbEnglish.base}`;
+                case 'preterito_perfeito': return `${s} ${verbEnglish.past}`;
+                case 'preterito_imperfeito': {
+                    const be = (person === 'nos' || person === 'voces') ? 'were' : 'was';
+                    return `${s} ${be} ${verbEnglish.gerund}`;
+                }
+                case 'futuro_simples': return `${s} will ${verbEnglish.base}`;
+                case 'condicional_simples': return `${s} would ${verbEnglish.base}`;
+                case 'gerundio': return verbEnglish.gerund;
+                case 'participio': return verbEnglish.pp;
+                case 'imperativo': return `${verbEnglish.base}!`;
+                case 'preterito_perfeito_composto': return `${s} have ${verbEnglish.pp}`;
+                case 'mais_que_perfeito_composto': return `${s} had ${verbEnglish.pp}`;
+                default: return '';
+            }
+        }
+
+        function stripAccents(str) {
+            return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+        }
+
         async function loadConjugationData() {
             try {
                 const response = await fetch('conjugations.json');
@@ -1681,6 +1739,7 @@
             if (saved) {
                 const parsed = JSON.parse(saved);
                 conjState.enabledTenses = parsed.enabledTenses || {};
+                if (parsed.ignoreAccents !== undefined) conjState.ignoreAccents = parsed.ignoreAccents;
             }
             // Default all tenses to enabled
             CONJ_TENSES.forEach(t => {
@@ -1692,7 +1751,8 @@
 
         function saveConjState() {
             localStorage.setItem('conjTrainerState', JSON.stringify({
-                enabledTenses: conjState.enabledTenses
+                enabledTenses: conjState.enabledTenses,
+                ignoreAccents: conjState.ignoreAccents
             }));
         }
 
@@ -1717,10 +1777,23 @@
             document.getElementById('conjSettings').classList.toggle('hidden');
         });
 
+        function initAccentToggle() {
+            const cb = document.getElementById('ignoreAccentsCheckbox');
+            const badge = document.getElementById('accentBadge');
+            cb.checked = conjState.ignoreAccents;
+            badge.style.display = conjState.ignoreAccents ? 'inline' : 'none';
+            cb.addEventListener('change', () => {
+                conjState.ignoreAccents = cb.checked;
+                badge.style.display = cb.checked ? 'inline' : 'none';
+                saveConjState();
+            });
+        }
+
         function initConjQuiz() {
             if (Object.keys(conjData).length === 0) return;
             loadConjState();
             buildTenseCheckboxes();
+            initAccentToggle();
             conjState.sessionCorrect = 0;
             conjState.sessionTotal = 0;
             updateConjScore();
@@ -1790,6 +1863,11 @@
             document.getElementById('conjTenseLabel').textContent = tenseInfo.label;
             document.getElementById('conjPersonLabel').textContent = person ? PERSON_LABELS[person] : '(no person)';
 
+            // English hint
+            const verbEng = VERB_ENGLISH[verb];
+            const hint = getEnglishHint(tenseKey, verbEng, person);
+            document.getElementById('conjEnglishHint').textContent = hint ? `e.g. "${hint}"` : '';
+
             // Reset input and feedback
             document.getElementById('conjInput').value = '';
             const feedback = document.getElementById('conjFeedback');
@@ -1814,15 +1892,21 @@
             if (!input) return;
 
             const correct = conjState.correctAnswer;
-            // Case-insensitive but accent-sensitive comparison
-            const isCorrect = input.toLowerCase() === correct.toLowerCase();
+            const inputLower = input.toLowerCase();
+            const correctLower = correct.toLowerCase();
+            const exactMatch = inputLower === correctLower;
+            const accentMatch = !exactMatch && conjState.ignoreAccents &&
+                stripAccents(inputLower) === stripAccents(correctLower);
+            const isCorrect = exactMatch || accentMatch;
 
             const feedback = document.getElementById('conjFeedback');
             feedback.classList.remove('hidden', 'correct', 'incorrect');
 
             if (isCorrect) {
                 feedback.classList.add('correct');
-                feedback.textContent = 'Correct!';
+                feedback.textContent = accentMatch
+                    ? `Correct! (with accents: ${correct})`
+                    : 'Correct!';
                 conjState.sessionCorrect++;
             } else {
                 feedback.classList.add('incorrect');
